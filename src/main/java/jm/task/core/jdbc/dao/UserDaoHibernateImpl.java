@@ -48,6 +48,10 @@ public class UserDaoHibernateImpl implements UserDao {
             session.save(new User(name, lastName, age));
             transaction.commit();
         } catch (Exception e) {
+            if(transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
         }
     }
 
@@ -62,6 +66,10 @@ public class UserDaoHibernateImpl implements UserDao {
             }
             transaction.commit();
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            e.printStackTrace();
         }
     }
 
