@@ -77,7 +77,11 @@ public class UserDaoHibernateImpl implements UserDao {
     public List<User> getAllUsers() {
         try (Session session = sessionFactory.openSession()) {
             return session.createQuery("FROM User").getResultList();
-        }
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        } return null;
     }
 
     @Override
@@ -87,6 +91,9 @@ public class UserDaoHibernateImpl implements UserDao {
             session.createSQLQuery("TRUNCATE TABLE Users").executeUpdate();
             transaction.commit();
         } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
         }
     }
 }
